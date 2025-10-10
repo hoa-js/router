@@ -28,7 +28,7 @@ export default app
 
 The documentation is available on [hoa-js.com](https://hoa-js.com/middleware/router.html)
 
-## Test (100% coverage rate)
+## Test (100% coverage)
 
 ```sh
 $ npm test

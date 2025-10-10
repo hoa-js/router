@@ -1,17 +1,17 @@
 {
   "name": "@hoajs/router",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Router middleware for Hoa.",
-  "main": "./dist/cjs/router.js",
+  "main": "./dist/cjs/index.js",
   "type": "module",
-  "module": "./dist/esm/router.js",
+  "module": "./dist/esm/index.js",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./dist/esm/router.js",
-      "require": "./dist/cjs/router.js",
-      "default": "./dist/esm/router.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
     }
   },
   "files": [
@@ -20,7 +20,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint .",
     "build": "tsup",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
@@ -34,6 +34,8 @@
   },
   "keywords": [
     "hoa",
+    "extension",
+    "extend",
     "middleware",
     "route",
     "router"

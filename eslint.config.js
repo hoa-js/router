@@ -3,7 +3,7 @@ import neostandard from 'neostandard'
 
 export default [
   ...neostandard({
-    ignores: ['dist/**', 'node_modules/**']
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**']
   }),
   {
     files: ['src/**/*.js', '__test__/**/*.js'],

@@ -1,21 +1,35 @@
 import { pathToRegexp } from 'path-to-regexp'
 import { compose } from 'hoa'
 
-const methods = ['options', 'head', 'get', 'post', 'put', 'patch', 'delete']
+import { methods } from './methods.js'
 
 /**
  * Hoa Router Extension
- * Adds routing capabilities to Hoa applications using path-to-regexp
+ * Adds routing helpers (get/post/...) to Hoa applications using path-to-regexp under the hood.
+ *
+ * Options:
+ * - sensitive: RegExp case sensitivity. When false (default), add the `i` flag.
+ * - end: Whether the match must reach the end of the string (default: true).
+ * - delimiter: Default delimiter for segments (affects `:named` parameters, default: '/').
+ * - trailing: Whether to allow an optional trailing delimiter to match (default: true).
+ *
+ * Returns: Extension function that augments the Hoa app with routing helpers.
+ *
+ * Example:
+ *   app.use(router({ trailing: true }))
+ *   app.get('/users/:id', async (ctx) => {
+ *     ctx.res.body = { id: ctx.req.params.id }
+ *   })
  *
  * @param {Object} options - Router configuration options
- * @param {boolean} [options.sensitive=false] - Regexp will be case sensitive
+ * @param {boolean} [options.sensitive=false] - RegExp will be case sensitive
  * @param {boolean} [options.end=true] - Validate the match reaches the end of the string
  * @param {string} [options.delimiter='/'] - Default delimiter for segments (e.g. used for `:named` parameters)
  * @param {boolean} [options.trailing=true] - Allows optional trailing delimiter to match
  * @returns {Function} Extension function for Hoa app
  */
-export function hoaRouter (options = {}) {
-  return function hoaRouterExtension (app) {
+export function router (options = {}) {
+  return function routerExtension (app) {
     methods.forEach(method => {
       app[method] = createRouteMethod(method.toUpperCase())
     })
@@ -39,17 +53,20 @@ export function hoaRouter (options = {}) {
 }
 
 /**
- * Create a route middleware function
+ * Create and register a route middleware.
+ * Matches the given path and method, parses params, and composes handlers.
+ * GET routes also handle HEAD requests as a conventional fallback.
+ *
  * @param {string} [method] - HTTP method (uppercase), undefined for all methods
  * @param {string} path - Route path pattern
- * @param {Function[]} handlers - Route handlers
+ * @param {Function[]} handlers - Route handlers to execute on match
  * @param {Object} options - Path-to-regexp options
- * @returns {Function} Route middleware
+ * @returns {Function} Route middleware (ctx, next) => Promise<void> | void
  */
 function createRoute (method, path, handlers, options) {
   const { regexp, keys } = pathToRegexp(path, options)
 
-  const composedHandler = handlers.length === 1 ? handlers[0] : compose(handlers)
+  const composed = handlers.length === 1 ? handlers[0] : compose(handlers)
 
   return function routeMiddleware (ctx, next) {
     if (!matches(ctx, method)) return next()
@@ -59,7 +76,6 @@ function createRoute (method, path, handlers, options) {
 
     const params = {}
     const args = m.slice(1).map(decode)
-
     keys.forEach((key, index) => {
       const value = args[index]
       if (value !== undefined) {
@@ -72,21 +88,25 @@ function createRoute (method, path, handlers, options) {
     ctx.req.params = params
     ctx.req.routePath = path
 
-    return composedHandler(ctx, next)
+    return composed(ctx, next)
   }
 }
 
 /**
- * Decode URL parameter value
+ * Decode a URL parameter value.
+ * Returns undefined for falsy input to preserve optional capture semantics.
+ *
  * @param {string} val - Encoded value
- * @returns {string} Decoded value
+ * @returns {string|undefined} Decoded value (or undefined if input is falsy)
  */
 function decode (val) {
   if (val) return decodeURIComponent(val)
 }
 
 /**
- * Check if request method matches route method
+ * Check if the request method matches the route method.
+ * Also treats HEAD requests as matching GET routes.
+ *
  * @param {Object} ctx - Hoa context
  * @param {string} [method] - Route method (uppercase)
  * @returns {boolean} Whether method matches
@@ -98,5 +118,4 @@ function matches (ctx, method) {
   return false
 }
 
-export default hoaRouter
-export { hoaRouter as router, methods }
+export default router

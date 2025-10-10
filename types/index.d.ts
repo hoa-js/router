@@ -2,7 +2,7 @@
 // Project: https://github.com/hoa-js/router
 // Definitions by: nswbmw
 
-import type { Hoa, HoaContext, HoaRequest } from 'hoa'
+import type { Hoa, HoaContext } from 'hoa'
 
 export type Method = 'options' | 'head' | 'get' | 'post' | 'put' | 'patch' | 'delete'
 
@@ -23,13 +23,15 @@ export type Middleware = (ctx: HoaContext, next: () => Promise<void>) => Promise
 
 /**
  * Hoa Router Extension
- * Adds routing capabilities to Hoa applications using path-to-regexp
+ * Adds routing helpers (get/post/...) to Hoa applications using path-to-regexp.
  */
-export declare function hoaRouter (options?: RouterOptions): (app: Hoa) => void
+export declare function router (options?: RouterOptions): (app: Hoa) => void
 
-declare const _default: typeof hoaRouter
-export default _default
-export { hoaRouter as router }
+/**
+ * Hoa Tiny Router Extension
+ * Adds lightweight routing helpers using a minimal path compiler.
+ */
+export declare function tinyRouter (options?: Pick<RouterOptions, 'sensitive' | 'trailing'>): (app: Hoa) => void
 
 /**
  * Module augmentation: extend Hoa with routing methods and request params fields

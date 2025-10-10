@@ -1,5 +1,5 @@
 import { Hoa } from 'hoa'
-import { router, methods } from '../src/router.js'
+import { router, methods } from '../src/index.js'
 
 // Helper to perform a request against Hoa app
 async function req (app, method, path) {
@@ -59,8 +59,8 @@ describe('hoa router basic methods', () => {
   }
 })
 
-describe('hoa router composed handlers on a single route', () => {
-  test('handlers run in order and can set status/body', async () => {
+describe('middleware composition and chaining', () => {
+  test('multiple handlers on single route run in order', async () => {
     const app = new Hoa()
     app.extend(router())
 
@@ -74,10 +74,8 @@ describe('hoa router composed handlers on a single route', () => {
     expect(res.status).toBe(201)
     expect(await res.text()).toBe('ok')
   })
-})
 
-describe('multiple route middlewares chaining', () => {
-  test('each route may call next()', async () => {
+  test('multiple routes can chain via next()', async () => {
     const app = new Hoa()
     app.extend(router({}))
 
@@ -205,8 +203,8 @@ describe('route params parsing and decoding', () => {
   })
 })
 
-describe('ctx.req.routePath is set when route matches', () => {
-  test('routePath recorded', async () => {
+describe('request context enrichment', () => {
+  test('ctx.req.routePath records matched route pattern', async () => {
     const app = new Hoa()
     app.extend(router({}))
 
@@ -218,10 +216,8 @@ describe('ctx.req.routePath is set when route matches', () => {
     expect(res.status).toBe(200)
     expect(await res.text()).toBe('/hoa/:var')
   })
-})
 
-describe('HEAD request falls back to GET handler when no HEAD defined', () => {
-  test('GET route serves HEAD requests', async () => {
+  test('HEAD requests fall back to GET handlers', async () => {
     const app = new Hoa()
     app.extend(router({}))
 
@@ -233,16 +229,11 @@ describe('HEAD request falls back to GET handler when no HEAD defined', () => {
   })
 })
 
-describe('error handling when no handlers provided', () => {
-  test('throws if registering route without handler', () => {
+describe('error handling', () => {
+  test('throws when registering route without handler', () => {
     const app = new Hoa()
     app.extend(router({}))
     expect(() => app.get('/hoa')).toThrow(/must have at least one handler/)
-  })
-
-  test('throws for app.all without handler (covers ALL branch)', () => {
-    const app = new Hoa()
-    app.extend(router({}))
     expect(() => app.all('/hoa')).toThrow(/ALL \/hoa/)
   })
 })
