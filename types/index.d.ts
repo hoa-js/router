@@ -2,7 +2,7 @@
 // Project: https://github.com/hoa-js/router
 // Definitions by: nswbmw
 
-import type { Hoa, HoaContext } from 'hoa'
+import type { Hoa, HoaMiddleware } from 'hoa'
 
 export type Method = 'options' | 'head' | 'get' | 'post' | 'put' | 'patch' | 'delete'
 
@@ -19,18 +19,8 @@ export interface RouterOptions {
   trailing?: boolean
 }
 
-export type Middleware = (ctx: HoaContext, next: () => Promise<void>) => Promise<any> | any
-
-/**
- * Hoa Router Extension
- * Adds routing helpers (get/post/...) to Hoa applications using path-to-regexp.
- */
 export declare function router (options?: RouterOptions): (app: Hoa) => void
 
-/**
- * Hoa Tiny Router Extension
- * Adds lightweight routing helpers using a minimal path compiler.
- */
 export declare function tinyRouter (options?: Pick<RouterOptions, 'sensitive' | 'trailing'>): (app: Hoa) => void
 
 /**
@@ -38,14 +28,14 @@ export declare function tinyRouter (options?: Pick<RouterOptions, 'sensitive' | 
  */
 declare module 'hoa' {
   interface Hoa {
-    options (path: string, ...handlers: Middleware[]): Hoa
-    head (path: string, ...handlers: Middleware[]): Hoa
-    get (path: string, ...handlers: Middleware[]): Hoa
-    post (path: string, ...handlers: Middleware[]): Hoa
-    put (path: string, ...handlers: Middleware[]): Hoa
-    patch (path: string, ...handlers: Middleware[]): Hoa
-    delete (path: string, ...handlers: Middleware[]): Hoa
-    all (path: string, ...handlers: Middleware[]): Hoa
+    options (path: string, ...handlers: HoaMiddleware[]): Hoa
+    head (path: string, ...handlers: HoaMiddleware[]): Hoa
+    get (path: string, ...handlers: HoaMiddleware[]): Hoa
+    post (path: string, ...handlers: HoaMiddleware[]): Hoa
+    put (path: string, ...handlers: HoaMiddleware[]): Hoa
+    patch (path: string, ...handlers: HoaMiddleware[]): Hoa
+    delete (path: string, ...handlers: HoaMiddleware[]): Hoa
+    all (path: string, ...handlers: HoaMiddleware[]): Hoa
   }
 
   interface HoaRequest {
