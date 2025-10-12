@@ -39,12 +39,8 @@ describe('hoa tinyRouter basic methods', () => {
         app[method]('/hoa', async (ctx) => { ctx.res.body = 'hoa' })
 
         const res = await req(app, method, '/hoax')
-        // In Hoa, HEAD requests without matching routes return 200 by default
-        if (method === 'head') {
-          expect(res.status).toBe(200)
-        } else {
-          expect(res.status).toBe(404)
-        }
+        // No route match => expect 404 for all methods (HEAD included)
+        expect(res.status).toBe(404)
       })
 
       test('404 when only path matches (method mismatch)', async () => {
