@@ -1,7 +1,7 @@
 import { pathToRegexp } from 'path-to-regexp'
 import { compose } from 'hoa'
 
-import { methods } from './methods.js'
+export const methods = ['options', 'head', 'get', 'post', 'put', 'patch', 'delete']
 
 /**
  * Hoa Router Extension

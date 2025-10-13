@@ -1,5 +1,5 @@
 import { Hoa } from 'hoa'
-import { router, methods } from '../src/index.js'
+import { router, methods } from '../src/router.js'
 
 // Helper to perform a request against Hoa app
 async function req (app, method, path) {

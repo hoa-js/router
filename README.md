@@ -26,7 +26,7 @@ export default app
 
 ## Documentation
 
-The documentation is available on [hoa-js.com](https://hoa-js.com/middleware/router.html)
+The documentation is available on [hoa-js.com](https://hoa-js.com/middleware/router/router.html)
 
 ## Test (100% coverage)
 

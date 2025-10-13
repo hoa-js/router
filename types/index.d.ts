@@ -21,7 +21,7 @@ export interface RouterOptions {
 
 export declare function router (options?: RouterOptions): (app: Hoa) => void
 
-export declare function tinyRouter (options?: Pick<RouterOptions, 'sensitive' | 'trailing'>): (app: Hoa) => void
+export default router
 
 /**
  * Module augmentation: extend Hoa with routing methods and request params fields
