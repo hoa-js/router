@@ -2,7 +2,7 @@
 // Project: https://github.com/hoa-js/router
 // Definitions by: nswbmw
 
-import type { Hoa, HoaMiddleware } from 'hoa'
+import type { Hoa, HoaMiddleware, HoaExtension } from 'hoa'
 
 export type Method = 'options' | 'head' | 'get' | 'post' | 'put' | 'patch' | 'delete'
 
@@ -19,7 +19,7 @@ export interface RouterOptions {
   trailing?: boolean
 }
 
-export declare function router (options?: RouterOptions): (app: Hoa) => void
+export declare function router (options?: RouterOptions): HoaExtension
 
 export default router
 
