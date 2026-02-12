@@ -1,17 +1,17 @@
 {
   "name": "@hoajs/router",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Router middleware for Hoa.",
-  "main": "./dist/cjs/router.js",
+  "main": "./dist/cjs/router.cjs",
   "type": "module",
-  "module": "./dist/esm/router.js",
+  "module": "./dist/esm/router.mjs",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./dist/esm/router.js",
-      "require": "./dist/cjs/router.js",
-      "default": "./dist/esm/router.js"
+      "import": "./dist/esm/router.mjs",
+      "require": "./dist/cjs/router.cjs",
+      "default": "./dist/esm/router.mjs"
     }
   },
   "files": [
@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "build": "tsup",
+    "build": "tsdown",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "prepare": "husky"
@@ -41,15 +41,15 @@
     "router"
   ],
   "devDependencies": {
-    "@commitlint/cli": "20.1.0",
-    "@commitlint/config-conventional": "20.0.0",
-    "eslint": "9.37.0",
-    "globals": "16.4.0",
+    "@commitlint/cli": "20.4.1",
+    "@commitlint/config-conventional": "20.4.1",
+    "eslint": "9.39.2",
+    "globals": "17.3.0",
     "hoa": "*",
     "husky": "9.1.7",
     "jest": "30.2.0",
     "neostandard": "0.12.2",
-    "tsup": "8.5.0"
+    "tsdown": "^0.20.3"
   },
   "peerDependencies": {
     "hoa": "*"
